@@ -1,0 +1,170 @@
+
+// colors
+$blue: #092B40;
+$lightBlue: #85DEF2;
+$water: #52A5D9;
+$sky: #5BB5D9;
+$orange: #D96F32;
+
+* {
+	box-sizing: border-box;
+}
+
+html,body,main {
+	font-family: "Lucida Grande","Lucida Sans Unicode", Tahoma, Sans-Serif;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	padding-top: 10px;
+	width: 100%;
+	height: 100%;
+	background-color: $blue;
+}
+
+input[type = "text"] {
+	-webkit-appearance: none;
+	border: none;
+	outline: none;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+}
+
+.fullHeight {
+	height: 100%;
+
+}
+
+.white-text {
+	color: #fff;
+	text-decoration: none;
+}
+
+form {
+	display: block;
+	position: relative;
+	width: 40px;
+	height: 40px;
+	margin-top: 16px;
+	border: solid 4px $orange;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all .25s ease .3s;
+	&:before {
+		content: "";
+		display: block;
+		position: absolute;
+		left: 80%;
+		top: 105%;
+		width: 16px;
+		height: 3px;
+		background-color: $orange;
+		border-radius: 1px;
+		transition: width .15s ease .55s;
+		transform: rotate(45deg);
+	}
+	input {
+		width: 100%;
+		height: 100%;
+		padding: 0 30px 0 15px;
+		font-size: 14px;
+		opacity: 0;
+		background-color: transparent;
+		color: #fff;
+		transition: opacity .15s ease;
+	}
+	.eks {
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+		&:before, &:after {
+			content: "";
+			display: block;
+			position: absolute;
+			right: 5px;
+			width: 2px;
+			height: 2px;
+			border-radius: 1px;
+			background-color: $orange;
+			transition: all .25s ease;
+		}
+		&:before {		
+			top: 0;
+			transform: rotate(-45deg);
+			transition-delay: .1s;
+		}
+		&:after {
+			bottom: 0;
+			transform: rotate(45deg);
+			transition-delay: 0s;
+		}
+	}
+}
+
+form.open {
+	width: 260px;
+	transition-delay: .1s;
+	&:before {
+		width: 0;
+		transition-delay: 0s;
+	}
+	input {
+		opacity: 1;
+		transition-delay: .15s;
+	}
+	.eks {
+		&:before, &:after {
+			width: 15px;
+			right: 8px;
+		}
+		&:before {
+			top: 15px;
+			transition-delay: .25s;
+		}
+		&:after {
+			bottom: 13px;
+			transition-delay: .3s;
+		}
+	}
+}
+
+ul {
+	width: 80%;
+	margin-left: 0;
+	padding-left: 0;
+	li {
+		display: block;
+		margin-bottom: 10px;
+		background-color: #E7E7E8;
+		opacity: 1;
+
+		&:hover {
+			border-left: solid 5px $orange;
+			margin-left: -5px;
+		}
+
+		a {
+			display: block;
+			padding: 15px 30px 5px 30px;
+			text-decoration: none;
+			color: #000;
+
+			h2 {
+				font-size: 18px;
+			}
+			p {
+				font-size: 14px;
+			}
+		}
+	}
+}

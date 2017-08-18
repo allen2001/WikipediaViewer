@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>wiki</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<main>
+		<div id="search" class="wrapper fullHeight">
+			<a href="https://en.wikipedia.org/wiki/Special:Random" class="white-text" target="_blank">Click here for a random article</a>
+			<form id="s_form">
+				<input type="text" id="s_text">
+				<div class="eks"></div>
+			</form>
+			<p class="white-text" id="help">Click icon to search</p>
+		</div>
+		<div class="wrapper">
+			<ul id="wikiList">
+				<!-- <li>
+					<a href="" target="_blank">
+						<h2></h2>
+						<p></p>
+					</a>
+				</li> -->
+			</ul>
+		</div>
+	</main>
+</body>
+
+<!-- js -->
+<script type="text/javascript" src="libs/jquery.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var search = $("#search");
+		var form = $("#s_form");
+		var input = $("#s_text");
+		var close = $(".eks");
+
+		close.on("click", function () {
+			form.toggleClass("open");
+			if (!form.hasClass('open')) {
+				if (!search.hasClass('fullHeight')) {
+					search.addClass('fullHeight');
+				}	
+			}
+			input.val("");
+			$("#wikiList").html("");
+		})
+
+		form.submit(function (e) {
+			if (input.val() !== "") {
+				search.removeClass('fullHeight');
+
+				var api = "https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=";
+				var title = input.val();
+				var cb = "&callback=JSON_CALLBACK";
+				var page = 'https://en.wikipedia.org/?curid=';
+
+				$.ajax({
+					url: api + title + cb,
+					type: "GET",
+					dataType: "jsonp",
+					success: function (data) {
+						$("#wikiList").html("");
+						var results = data.query.pages;
+						console.log(results)
+						for (var key in results) {
+							var item = $("<li><a target='_blank'><h2></h2><p></p></a></li>");
+							$("#wikiList").append(item);
+							item.find('a').prop("href", page + results[key].pageid)
+							item.find('h2').text(results[key].title);
+							item.find('p').text(results[key].extract);
+						}
+					}
+				})
+			}
+
+			e.preventDefault();
+		})		
+	})
+
+</script>
+</html>

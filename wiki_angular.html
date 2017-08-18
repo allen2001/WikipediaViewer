@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>wiki</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<main ng-app="WikiApp" ng-controller="MainCtrl">
+		<div id="search" class="wrapper fullHeight">
+			<a href="https://en.wikipedia.org/wiki/Special:Random" class="white-text" target="_blank">Click here for a random article</a>
+			<form id="s_form" ng-submit="search()">
+				<input type="text" id="s_text">
+				<div class="eks"></div>
+			</form>
+			<p class="white-text" id="help">Click icon to search</p>
+		</div>
+		<div class="wrapper">
+			<ul id="wikiList">
+				<li ng-repeat="item in result">
+					<a ng-href="{{ item.page }}" target="_blank">
+						<h2>{{ item.title }}</h2>
+						<p>{{ item.des }}</p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</main>
+</body>
+
+<!-- js -->
+<script type="text/javascript" src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script type="text/javascript" src="libs/jquery.js"></script>
+<!-- <script type="text/javascript" src="http://apps.bdimg.com/libs/angular.js/1.3.2/angular-animate.js"></script> -->
+<script type="text/javascript">
+	var app = angular.module("WikiApp", []);
+	app.controller("MainCtrl", function ($scope, $http, $timeout) {
+		var search = $("#search");
+		var form = $("#s_form");
+		var input = $("#s_text");
+		var close = $(".eks");
+
+		// 
+		$scope.result = [];
+
+		close.on("click", function () {
+			form.toggleClass("open");
+			if (!form.hasClass('open')) {
+				if (!search.hasClass('fullHeight')) {
+					search.addClass('fullHeight');
+				}
+			}
+			input.val("");
+			$scope.result = [];
+		})
+
+		$scope.search = function () {
+			// 每次重新提交前清空数组
+			$scope.result = [];
+			search.removeClass('fullHeight');
+
+		    var title = input.val();
+		    var api = 'https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=';
+		    var cb = '&callback=JSON_CALLBACK';
+		    var page = 'https://en.wikipedia.org/?curid=';
+
+		    $http.jsonp(api + title + cb).success(function (data) {
+		    	var results = data.query.pages;
+		    	angular.forEach(results, function (val, key) {
+		    		$scope.result.push({
+		    			title: val.title,
+		    			des: val.extract,
+		    			page: page + val.pageid
+		    		})
+		    	})
+		    })			
+		}
+	})
+
+</script>
+</html>
